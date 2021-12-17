@@ -24,3 +24,9 @@ def checkNumber(number):
 
 for number in numbers:
     print(str(number) + checkNumber(number))
+
+
+name = "Gustavo"
+
+for letter in name:
+    print(letter)
