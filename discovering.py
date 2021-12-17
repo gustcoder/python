@@ -28,3 +28,7 @@ name = "Gustavo"
 last_name = "Ramos"
 
 print(name + " " + last_name)
+
+print(name[0:3])
+print(name[:3])
+print(name[3:])
