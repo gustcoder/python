@@ -22,3 +22,9 @@ pow = pow(2,3)
 
 result = sum + sub + multi - div + pow
 print(result >= 0 and "Greater than zero" or "Sub-zero!")
+
+
+name = "Gustavo"
+last_name = "Ramos"
+
+print(name + " " + last_name)
