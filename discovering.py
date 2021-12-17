@@ -20,4 +20,5 @@ multi = multi(2,10)
 div = div(40,2)
 pow = pow(2,3)
 
-print("Result:" + str(sum + sub + multi - div + pow))
+result = sum + sub + multi - div + pow
+print(result >= 0 and "Greater than zero" or "Sub-zero!")
