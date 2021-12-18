@@ -20,12 +20,20 @@ account_list = {
     }
 }
 
-money_slips = {
+money_slips_options = {
     '100': 100,
     '50': 50,
     '20': 20,
     '10': 10,
     '5': 5
+}
+
+money_slips_quantity = {
+    '100': 10,
+    '50': 20,
+    '20': 30,
+    '10': 40,
+    '5': 50
 }
 
 def main():
@@ -63,37 +71,44 @@ def showMenu(account):
     print('2: Sacar')
     print('3: Sair')
 
-    option = input("Digite uma das opções: ")
+    operation = input("Selecione uma das operações: ")
 
-    selectOptions(account, option)
+    doOperations(account, operation)
 
-def selectOptions(account, option):
+def doOperations(account, operation):
+    if operation == '1':
+        creditOperation(account)
+
+    if operation == '2':
+        debitOperation(account)
+
+    elif operation == '3':
+        exit()
+
+def creditOperation(account):
+    credit = float(input("Quanto deseja depositar? "))
+    validateCredit(credit)
+
+    account_list[account]["value"] += credit
+    printMessage('Novo saldo: ', "R$ %s" % formatValue(account_list[account]["value"]))    
+
+def debitOperation(account):
     value = account_list[account]["value"]
+    debit = float(input("Quanto deseja retirar? "))
 
-    if option == '1':
-        credit = float(input("Quanto deseja depositar? "))
-        validateCredit(credit)
+    validateDebit(debit, value)
+        
+    account_list[account]["value"] -= debit
 
-        account_list[account]["value"] += credit
-        printMessage('Novo saldo: ', "R$ %s" % formatValue(account_list[account]["value"]))
+    moneySlipsOptions = getMoneySlipsOptions(debit)
 
-    if option == '2':
-        debit = float(input("Quanto deseja retirar? "))
-        validateDebit(debit, value)
-            
-        account_list[account]["value"] -= debit
+    if not moneySlipsOptions:
+        print("Não temos cédulas!!!")
+        exit()
 
-        moneySlipsOptions = getMoneySlipsOptions(debit)
+    print('Retire as Cédulas: ', moneySlipsOptions)
 
-        if not moneySlipsOptions:
-            print("Não temos cédulas!!!")
-            exit()
-
-        print('Retire as Cédulas: ', moneySlipsOptions)
-
-        printMessage('Novo saldo:', "R$ %s" % formatValue(account_list[account]["value"]))
-    elif option == '3':
-        exit()    
+    printMessage('Novo saldo:', "R$ %s" % formatValue(account_list[account]["value"]))    
 
 def formatValue(value):
     return str(float(value))
@@ -120,38 +135,21 @@ def validateDebit(debit, value):
         print("Saldo insuficiente!!!")    
         exit()
 
-def _buildNumSlipsOptions(optionNumber, value, slip):
-    modSlips = float(value) % float(slip)
-    if (modSlips == 0):
-        numSlips = int(float(value) / float(slip))
-        numSlipsOptions = {
-            str(optionNumber): str(numSlips) + " cédulas de " + slip
-        }
-
-        return numSlipsOptions
-    else:
-        print("Opção inválida!!!")
-
-def buildNumSlipsOptions(optionNumber, value, slip):
-    if value // slip > 0:
-        numSlipsOptions = {
-            slip: value // slip
-        }
-        buildNumSlipsOptions(optionNumber, value, slip)
-
 def getMoneySlipsOptions(value):
     optionNumber = 0
     numSlipsOptions = {}
     value = int(value)
-    for slip in money_slips:
+    for slip in money_slips_options:
         optionNumber += 1
-        slip = int(slip)
+        slipInt = int(slip)
+        floorValue = value // slipInt
 
-        if value // slip > 0:
+        if floorValue > 0 and floorValue <= money_slips_quantity[slip]:
             numSlipsOptions.update({
-                slip: value // slip
+                slipInt: floorValue
             })
-            value = value - value // slip * slip
+            value = value - (floorValue * slipInt)
+            money_slips_quantity[slip] -= floorValue
 
     return numSlipsOptions
 
