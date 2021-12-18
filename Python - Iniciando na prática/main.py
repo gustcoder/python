@@ -2,6 +2,32 @@ import getpass
 import os
 
 
+account_list = {
+    "001": {
+        "name": "Gustavo",
+        "password": "321",
+        "value": 5000
+    },
+    "002": {
+        "name": "Phil",
+        "password": "456789",
+        "value": 4600
+    },
+    "003": {
+        "name": "Sueli",
+        "password": "123456",
+        "value": 8000
+    }
+}
+
+money_slips = {
+    '100': 100,
+    '50': 50,
+    '20': 20,
+    '10': 10,
+    '5': 5
+}
+
 def formatValue(value):
     return str(float(value))
 
@@ -18,7 +44,7 @@ def validateDebit(debit, value):
         print("Saldo insuficiente!!!")    
         exit()
 
-def buildNumSlipsOptions(optionNumber, value, slip):
+def _buildNumSlipsOptions(optionNumber, value, slip):
     modSlips = float(value) % float(slip)
     if (modSlips == 0):
         numSlips = int(float(value) / float(slip))
@@ -27,44 +53,37 @@ def buildNumSlipsOptions(optionNumber, value, slip):
         }
 
         return numSlipsOptions
+    else:
+        print("Opção inválida!!!")
+
+def buildNumSlipsOptions(optionNumber, value, slip):
+    if value // slip > 0:
+        numSlipsOptions = {
+            slip: value // slip
+        }
+        buildNumSlipsOptions(optionNumber, value, slip)
 
 def getMoneySlipsOptions(value):
     optionNumber = 0
     numSlipsOptions = {}
+    value = int(value)
     for slip in money_slips:
         optionNumber += 1
-        numSlipsOptions.update(buildNumSlipsOptions(optionNumber, value, slip))
+        slip = int(slip)
+
+        if value // slip > 0:
+            numSlipsOptions.update({
+                slip: value // slip
+            })
+            value = value - value // slip * slip
 
     return numSlipsOptions
+
 
 while True:
     print('****************************************')
     print('*** School of Net - Caixa Eletrônico ***')
     print('****************************************')
-
-    account_list = {
-        "001": {
-            "name": "Gustavo",
-            "password": "321",
-            "value": 5000
-        },
-        "002": {
-            "name": "Phil",
-            "password": "456789",
-            "value": 4600
-        },
-        "003": {
-            "name": "Sueli",
-            "password": "123456",
-            "value": 8000
-        }
-    }
-
-    money_slips = {
-        '20': 20,
-        '50': 50,
-        '100': 100
-    }
 
     account = input("Digite o número de sua conta: ")
 
@@ -112,20 +131,16 @@ while True:
                 
             account_list[account]["value"] -= debit
 
-            print('Opções de retirada:')
-
             moneySlipsOptions = getMoneySlipsOptions(debit)
-            for slipOption in moneySlipsOptions:
-                print(slipOption +" - "+ moneySlipsOptions[slipOption])
 
-            getMoneyOption = input("Selecione a opção desejada:")
+            if not moneySlipsOptions:
+                print("Não temos cédulas!!!")
+                exit()
 
-            if getMoneyOption in moneySlipsOptions:
-                print('****************************************')
-                print("Novo saldo: R$ %s" % formatValue(account_list[account]["value"]))
-                print('****************************************')
-            else:
-                print("Opção inválida!!!")
+            print('Retire as Cédulas: ', moneySlipsOptions)
+
+            print('________________________________________')
+            print("Novo saldo: R$ %s" % formatValue(account_list[account]["value"]))
         elif option == '3':
             exit()
     else:
