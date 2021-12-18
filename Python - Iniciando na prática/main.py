@@ -18,6 +18,24 @@ def validateDebit(debit, value):
         print("Saldo insuficiente!!!")    
         exit()
 
+def buildNumSlipsOptions(optionNumber, value, slip):
+    modSlips = float(value) % float(slip)
+    if (modSlips == 0):
+        numSlips = int(float(value) / float(slip))
+        numSlipsOptions = {
+            str(optionNumber): str(numSlips) + " cédulas de " + slip
+        }
+
+        return numSlipsOptions
+
+def getMoneySlipsOptions(value):
+    optionNumber = 0
+    numSlipsOptions = {}
+    for slip in money_slips:
+        optionNumber += 1
+        numSlipsOptions.update(buildNumSlipsOptions(optionNumber, value, slip))
+
+    return numSlipsOptions
 
 while True:
     print('****************************************')
@@ -40,6 +58,12 @@ while True:
             "password": "123456",
             "value": 8000
         }
+    }
+
+    money_slips = {
+        '20': 20,
+        '50': 50,
+        '100': 100
     }
 
     account = input("Digite o número de sua conta: ")
@@ -66,9 +90,9 @@ while True:
         print("Saldo: R$ %s" % formatValue(value))
         print('****************************************')
 
-        print('1 - Depositar')
-        print('2 - Sacar')
-        print('3 - Sair')
+        print('1: Depositar')
+        print('2: Sacar')
+        print('3: Sair')
 
         option = input("Digite uma das opções: ")
 
@@ -87,9 +111,21 @@ while True:
             validateDebit(debit, value)
                 
             account_list[account]["value"] -= debit
-            print('****************************************')
-            print("Novo saldo: R$ %s" % formatValue(account_list[account]["value"]))
-            print('****************************************')
+
+            print('Opções de retirada:')
+
+            moneySlipsOptions = getMoneySlipsOptions(debit)
+            for slipOption in moneySlipsOptions:
+                print(slipOption +" - "+ moneySlipsOptions[slipOption])
+
+            getMoneyOption = input("Selecione a opção desejada:")
+
+            if getMoneyOption in moneySlipsOptions:
+                print('****************************************')
+                print("Novo saldo: R$ %s" % formatValue(account_list[account]["value"]))
+                print('****************************************')
+            else:
+                print("Opção inválida!!!")
         elif option == '3':
             exit()
     else:
