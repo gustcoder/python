@@ -82,7 +82,7 @@ def doOperations(account, operation):
     if operation == '2':
         debitOperation(account)
 
-    elif operation == '3':
+    if operation == '3':
         exit()
 
 def creditOperation(account):
