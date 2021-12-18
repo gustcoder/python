@@ -16,6 +16,8 @@ print(mix)
 del(mix[3])
 print(mix)
 
+##################################################
+
 def checkNumber(number):
     if number % 2 == 0:
         return " é Par"
@@ -25,8 +27,17 @@ def checkNumber(number):
 for number in numbers:
     print(str(number) + checkNumber(number))
 
-
+##################################################
 name = "Gustavo"
 
 for letter in name:
     print(letter)
+
+##################################################
+count = 10
+i = 0
+while i < 10:
+    i += 1
+    print(i)
+else:
+    print("chegou a 10")    
