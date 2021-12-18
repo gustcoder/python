@@ -58,6 +58,7 @@ def pause():
 def authAccount(account, password):
     if account in account_list and password == account_list[account]["password"]:
         return True
+
     return False
 
 def showMenu(account):
