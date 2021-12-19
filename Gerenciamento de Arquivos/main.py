@@ -1,7 +1,7 @@
 import getpass
 import utils
 import operations
-import menu
+from menu import showMenu
 from bank import db
 
 
@@ -16,7 +16,7 @@ def main():
     password = getpass.getpass("Digite sua senha: ")
 
     if operations.authAccount(account, password):
-        menu.showMenu(account)
+        showMenu(account)
     else:
         print("Senha incorreta")
         exit()
