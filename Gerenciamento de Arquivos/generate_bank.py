@@ -3,16 +3,6 @@ from posixpath import split
 import utils
 from bank import db
 
-def main():
-    utils.printMessage('School of Net - Caixa Eletrônico')
-    utils.printMessage('Gerando cédulas...')
-    #read_money_slips()
-    #store_money_slips('w')
-    read_money_slips_quantity()
-    store_money_slips_quantity('w')
-    utils.printMessage('Cédulas geradas com sucesso!!!')
-    #store_accounts('w')
-    #read_accounts()
 
 def open_bank_file(mode, file):
     return open(os.path.abspath(file), mode)    
@@ -129,7 +119,3 @@ def store_bank_data():
     store_money_slips('w')
     store_money_slips_quantity('w')
     store_accounts('w')
-
-# @todo implementar leitura/escrita das quantidades de cedulas no arquivo /bank/_money_slips_quantity.dat
-
-#main()
