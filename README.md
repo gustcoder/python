@@ -1,0 +1,1 @@
+# Exercícios e implementações referente ao Plano de Estudo Python - School of Net
